@@ -1,13 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
-
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.validators import check_product_exists, check_title_duplicate
 from app.core.db import get_async_session
 from app.crud.product import product_crud
-from app.models.product import Product
-from app.schemas.product import ProductCreate, ProductBD, ProductUpdate
+from app.schemas.product import ProductBD, ProductCreate, ProductUpdate
 
-router = APIRouter(prefix='/products', tags=['Products'])
+router = APIRouter()
 
 
 @router.post(
@@ -76,30 +75,4 @@ async def remote_product(
 ):
     product = await check_product_exists(id, session)
     product = await product_crud.delete_product(product, session)
-    return product
-
-
-async def check_title_duplicate(
-        product_title: str,
-        session: AsyncSession,
-        current_product_id: int | None = None
-) -> None:
-    product_id = await product_crud.get_product_id_by_title(product_title, session)
-    if product_id is not None and product_id != current_product_id:
-        raise HTTPException(
-            status_code=422,
-            detail='Товар с таким названием уже существует!',
-        )
-
-
-async def check_product_exists(
-        product_id: int,
-        session: AsyncSession,
-) -> Product:
-    product = await product_crud.get(product_id, session)
-    if product is None:
-        raise HTTPException(
-            status_code=404,
-            detail='Товар не найден!'
-        )
     return product

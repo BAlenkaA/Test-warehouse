@@ -1,12 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
-
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.validators import check_order_exists
 from app.core.db import get_async_session
 from app.crud.order import order_crud
-from app.schemas.order import OrderDB, OrderCreate
+from app.schemas.order import OrderCreate, OrderDB, OrderStatusUpdate
 
-router = APIRouter(prefix='/orders', tags=['Orders'])
+router = APIRouter()
 
 
 @router.post(
@@ -43,5 +43,19 @@ async def get_order(
         id: int,
         session: AsyncSession = Depends(get_async_session)
 ):
-    pass
+    order = await check_order_exists(id, session)
+    return order
 
+
+@router.patch(
+    '/{id}/status',
+    response_model=OrderDB,
+    response_model_exclude_none=True,
+)
+async def update_order_status(
+        id: int,
+        status_update: OrderStatusUpdate,
+        session: AsyncSession = Depends(get_async_session)
+):
+    order = await order_crud.update_status(id, status_update.status, session)
+    return order
