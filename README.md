@@ -46,3 +46,16 @@ from app.models import Product # noqa
 ```alembic revision --autogenerate -m "First migration"```
 8. Примените миграции:
 ```alembic upgrade head ```
+### Для развертывания приложения с помощью Docker Compose необходимо:
+1. Склонировать проект к себе git clone github.com:ваш-аккаунт-на-гитхабе/Test-warehouse.git
+2. В корне проекта создайте файл .env и заполните переменными:
+```
+APP_TITLE=API для управления складом  #Название, которое будет отображаться в Swagger и ReDoc
+DB_USER=<свпишите имя пользователя для postgres>
+DB_PASSWORD=<свпишите пароль для postgres>
+DB_NAME=<свпишите имя базы банных postgres>
+DB_PORT=5432
+DB_HOST=localhost
+```
+3. Из директории с проектом запустить docker compose командой:
+```docker compose up --build```
