@@ -51,11 +51,17 @@ from app.models import Product # noqa
 2. В корне проекта создайте файл .env и заполните переменными:
 ```
 APP_TITLE=API для управления складом  #Название, которое будет отображаться в Swagger и ReDoc
-DB_USER=<свпишите имя пользователя для postgres>
-DB_PASSWORD=<свпишите пароль для postgres>
-DB_NAME=<свпишите имя базы банных postgres>
+DB_USER=<впишите имя пользователя для postgres>
+DB_PASSWORD=<впишите пароль для postgres>
+DB_NAME=<впишите имя базы банных postgres>
 DB_PORT=5432
-DB_HOST=localhost
+DB_HOST=postgres
 ```
-3. Из директории с проектом запустить docker compose командой:
-```docker compose up --build```
+3. В терминале из директории с проектом запустить docker compose командой:
+```docker compose up -d --build```
+4. После запуска контейнеров инициализируйте Alembic с помощью асинхронного шаблона:
+```docker compose exec web alembic init -t async migrations```
+5. Локально выполните пункты с 3 по 6 включительно "Подключение миграций"
+6. В терминале из директории с проектом создайте первый файл миграции:
+```docker compose exec web alembic revision --autogenerate -m "init"```
+7. Примените миграции ```docker compose exec web alembic upgrade head```
