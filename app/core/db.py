@@ -4,6 +4,10 @@ from sqlalchemy.orm import (Mapped, declarative_base, declared_attr,
 
 from app.core.config import settings
 
+DATABASE_URL = (f'postgresql+asyncpg://{settings.db_user}:'
+                f'{settings.db_password}@{settings.db_host}:'
+                f'{settings.db_port}/{settings.db_name}')
+
 
 class PreBase:
 
@@ -16,7 +20,7 @@ class PreBase:
 
 Base = declarative_base(cls=PreBase)
 
-engine = create_async_engine(settings.database_url)
+engine = create_async_engine(DATABASE_URL)
 
 AsyncSessionLocal = sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False)
