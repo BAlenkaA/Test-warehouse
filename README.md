@@ -31,9 +31,10 @@
 5. Запустите API командой ```uvicorn app.main:app --reload```. По ссылке http://127.0.0.1:8000/docs будет доступна документация Swagger. По ссылке http://127.0.0.1:8000/redoc будет доступна документация ReDoc.
 ### Подключение миграций:
 1. Запустите postgres с заданными в .env параметрами
-2. Находясь в корне проекта инициализируйте Alembic командой ```alembic init -t async migrations```
+2. Находясь в корне проекта инициализируйте Alembic командой:
+```alembic init -t async migrations```
 3. Перейдите в создавшуюся папку migrations и откройте файл env.py
-4. Дополните импорты 
+5. Дополните импорты 
 ```
 from app.core.db import DATABASE_URL, Base
 from app.models import Product # noqa
