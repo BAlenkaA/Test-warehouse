@@ -57,6 +57,12 @@ DB_PASSWORD=<впишите пароль для postgres>
 DB_NAME=<впишите имя базы банных postgres>
 DB_PORT=5432
 DB_HOST=postgres
+
+DB_USER_TEST=<впишите имя пользователя для тестовой базыpostgres >
+DB_PASSWORD_TEST=<впишите пароль пользователя для тестовой базыpostgres >
+DB_NAME_TEST=postgres_test
+DB_PORT_TEST=6000
+DB_HOST_TEST=localhost
 ```
 3. В терминале из директории с проектом запустить docker compose командой:
 ```docker compose up -d --build```
