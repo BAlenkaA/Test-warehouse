@@ -1,8 +1,10 @@
 import pytest
 from httpx import AsyncClient
 
+
 def float_to_str(data_float):
     return f"{float(data_float['price']):.2f}"
+
 
 @pytest.mark.asyncio(loop_scope='session')
 async def test_create_product(async_client: AsyncClient):
@@ -22,7 +24,8 @@ async def test_create_product(async_client: AsyncClient):
     assert data["title"] == product_data["title"]
     assert data["description"] == product_data["description"]
     assert data["price"] == float_to_str(product_data)
-    assert data["quantity_in_warehouse"] == product_data["quantity_in_warehouse"]
+    assert (data["quantity_in_warehouse"] ==
+            product_data["quantity_in_warehouse"])
     assert "id" in data
 
 
@@ -74,7 +77,8 @@ async def test_update_product(async_client: AsyncClient):
     assert data["title"] == update_data["title"]
     assert data["description"] == update_data["description"]
     assert data["price"] == float_to_str(update_data)
-    assert data["quantity_in_warehouse"] == update_data["quantity_in_warehouse"]
+    assert (data["quantity_in_warehouse"] ==
+            update_data["quantity_in_warehouse"])
 
 
 @pytest.mark.asyncio(loop_scope='session')

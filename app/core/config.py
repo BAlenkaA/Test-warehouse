@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     db_name: str
     db_port: str
     db_host: str
+    # переменные для тестовой базы
     db_user_test: str
     db_password_test: str
     db_name_test: str
