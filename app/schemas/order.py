@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.order import OrderStatus
 from app.schemas.orderitem import OrderItemCreate
@@ -10,8 +10,9 @@ from app.schemas.orderitem import OrderItemCreate
 class OrderStatusUpdate(BaseModel):
     status: OrderStatus
 
-    class Config:
-        use_enum_values = True
+    model_config = ConfigDict(
+        use_enum_values=True
+    )
 
 
 class OrderCreate(OrderStatusUpdate):
@@ -25,5 +26,6 @@ class OrderDB(OrderCreate):
     id: int
     date_create: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(
+        from_attributes=True
+    )
