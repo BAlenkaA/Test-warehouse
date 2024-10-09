@@ -47,6 +47,17 @@ from app.models import Product # noqa
 ```alembic revision --autogenerate -m "First migration"```
 8. Примените миграции:
 ```alembic upgrade head ```
+9. Для тестирования используйте тестовую базу. Для этого необходимо в корне проекта создать файл .test.env с переменными:
+```
+DB_USER_TEST=<впишите имя пользователя для тестовой базы postgres>
+DB_PASSWORD_TEST=<впишите пароль пользователя для тестовой базы postgres>
+DB_NAME_TEST=postgres_test
+DB_PORT_TEST=6000
+DB_HOST_TEST=localhost
+mode=TEST
+```
+Далее запустите контейнер с тестовой базой командой: ```docker run -d --name <ваше название контейнера с тестовой бд> -e POSTGRES_PASSWORD=<пароль пользователя для тестовой базы postgres> -e POSTGRES_DB=postgres_test -p 6000:5432 postgres```
+
 ### Для развертывания приложения с помощью Docker Compose необходимо:
 1. Склонировать проект к себе git clone github.com:ваш-аккаунт-на-гитхабе/Test-warehouse.git
 2. В корне проекта создайте файл .env и заполните переменными:
@@ -57,12 +68,7 @@ DB_PASSWORD=<впишите пароль для postgres>
 DB_NAME=<впишите имя базы банных postgres>
 DB_PORT=5432
 DB_HOST=postgres
-
-DB_USER_TEST=<впишите имя пользователя для тестовой базыpostgres >
-DB_PASSWORD_TEST=<впишите пароль пользователя для тестовой базыpostgres >
-DB_NAME_TEST=postgres_test
-DB_PORT_TEST=6000
-DB_HOST_TEST=localhost
+mode=DEV
 ```
 3. В терминале из директории с проектом запустить docker compose командой:
 ```docker compose up -d --build```
