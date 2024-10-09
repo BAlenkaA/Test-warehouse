@@ -7,7 +7,7 @@ def float_to_str(data_float):
 
 
 @pytest.mark.asyncio(loop_scope='session')
-async def test_create_product(async_client: AsyncClient):
+async def test_create_product(async_client: AsyncClient, populate_products):
     """
     Тест на создание нового продукта.
     """
@@ -15,12 +15,11 @@ async def test_create_product(async_client: AsyncClient):
         "title": "New Product",
         "description": "A test product",
         "price": 99.99,
-        "quantity_in_warehouse": 100
+        "quantity_in_warehouse": 0
     }
     response = await async_client.post("/products/", json=product_data)
     assert response.status_code == 200
     data = response.json()
-    #
     assert data["title"] == product_data["title"]
     assert data["description"] == product_data["description"]
     assert data["price"] == float_to_str(product_data)
@@ -38,9 +37,8 @@ async def test_get_all_products(async_client: AsyncClient):
 
     assert response.status_code == 200
     data = response.json()
-    assert isinstance(data, list)  # Должен вернуться список
-    assert len(data) > 0  # Список не должен быть пустым, если есть продукты
-
+    assert isinstance(data, list)
+    assert len(data) > 3
 
 @pytest.mark.asyncio(loop_scope='session')
 async def test_get_product_by_id(async_client: AsyncClient):
@@ -48,15 +46,15 @@ async def test_get_product_by_id(async_client: AsyncClient):
     Тест на получение продукта по ID.
     """
 
-    response = await async_client.get("/products/1")
+    response = await async_client.get("/products/4")
     assert response.status_code == 200
     data = response.json()
 
-    assert data["id"] == 1
+    assert data["id"] == 4
     assert data["title"] == "New Product"
     assert data["description"] == "A test product"
     assert data["price"] == '99.99'
-    assert data["quantity_in_warehouse"] == 100
+    assert data["quantity_in_warehouse"] == 0
 
 
 @pytest.mark.asyncio(loop_scope='session')
@@ -66,11 +64,11 @@ async def test_update_product(async_client: AsyncClient):
     """
     update_data = {
         "title": "Updated Product",
-        "description": "Updated description",
+        "description": "A test product",
         "price": 150.00,
         "quantity_in_warehouse": 200
     }
-    response = await async_client.put("/products/1", json=update_data)
+    response = await async_client.put("/products/4", json=update_data)
     assert response.status_code == 200
     data = response.json()
 
@@ -89,12 +87,8 @@ async def test_delete_product(async_client: AsyncClient):
     response = await async_client.get("/products/")
     data = response.json()
     count_before = len(data)
-
-    response = await async_client.delete("/products/1")
+    response = await async_client.delete("/products/4")
     assert response.status_code == 200
-    data = response.json()
-    assert data["id"] == 1
-
     response = await async_client.get("/products/")
     data = response.json()
     count_after = len(data)

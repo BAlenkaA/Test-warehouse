@@ -7,14 +7,9 @@ class Settings(BaseSettings):
     db_user: str
     db_password: str
     db_name: str
-    db_port: str
+    db_port: int
     db_host: str
-    # переменные для тестовой базы
-    db_user_test: str
-    db_password_test: str
-    db_name_test: str
-    db_port_test: str
-    db_host_test: str
+    mode: str
 
     model_config = ConfigDict(
         env_file='.env'
@@ -22,3 +17,7 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+DATABASE_URL = (f'postgresql+asyncpg://{settings.db_user}:'
+                f'{settings.db_password}@{settings.db_host}:'
+                f'{settings.db_port}/{settings.db_name}')
